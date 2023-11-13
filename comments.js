@@ -1,40 +1,26 @@
-// create web server with express
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
+// Create web server
+// Run: node comments.js
+// Test: http://localhost:8000/comments.html
+// Test: http://localhost:8000/comments.html?user=foo
+// Test: http://localhost:8000/comments.html?user=foo&comment=bar
 
-// configure body-parser
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+var http = require('http');
+var url = require('url');
 
-// set port
-const port = 3000;
+var server = http.createServer(function(req, res) {
+	var url_parts = url.parse(req.url, true);
+	var query = url_parts.query;
+	var user = query.user;
+	var comment = query.comment;
 
-// handle GET request
-app.get('/comments', (req, res) => {
-  res.json("comments");
+	res.writeHead(200, {"Content-Type": "text/plain"});
+	if (user !== undefined && comment !== undefined) {
+		res.write(user + ' said: ' + comment);
+	} else {
+		res.write('You need to specify both user and comment parameters');
+	}
+	res.end();
 });
 
-// handle POST request
-app.post('/comments', (req, res) => {
-  const newComment = req.body;
-  res.json(newComment);
-});
-
-// handle PUT request
-app.put('/comments/:id', (req, res) => {
-  const id = req.params.id;
-  const updatedComment = req.body;
-  res.json(updatedComment);
-});
-
-// handle DELETE request
-app.delete('/comments/:id', (req, res) => {
-  const id = req.params.id;
-  res.send('Comment deleted');
-});
-
-// start server
-app.listen(port, () => {
-  console.log(`Server started: Listening at port ${port}`);
-});
+server.listen(8000);
+console.log('Server running on port 8000');
