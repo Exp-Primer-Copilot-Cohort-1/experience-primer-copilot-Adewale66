@@ -1,8 +1,4 @@
 // Create web server
-// Run: node comments.js
-// Test: http://localhost:8000/comments.html
-// Test: http://localhost:8000/comments.html?user=foo
-// Test: http://localhost:8000/comments.html?user=foo&comment=bar
 
 var http = require('http');
 var url = require('url');
